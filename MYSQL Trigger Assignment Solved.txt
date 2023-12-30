@@ -1,0 +1,207 @@
+----------------->Q 1. Write a trigger (named insertStudent) that saves the message "Record inserted successfully" in LOG(current date, current time, and message columns) table as soon as you insert the record in STUDENT  table.
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> -- Assuming LOG1 table structure
+mysql> CREATE TABLE LOG1 (
+    ->     logID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     logDate DATE,
+    ->     logTime TIME,
+    ->     message VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> -- Create the trigger to insert a log entry
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER insertStudent
+    -> AFTER INSERT ON STUDENT
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO LOG1 (logDate, logTime, message)
+    ->     VALUES (CURDATE(), CURTIME(), 'Record inserted successfully');
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> INSERT INTO STUDENT (namefirst, namelast, DOB, emailID)
+    -> VALUES ('John', 'Doe', '2000-01-01', 'john.doe@example.com');
+Query OK, 1 row affected (0.02 sec)
+
+
+
+--------------->Q 2. Write a trigger (named insertDuplicate) on STUDENT table, that as when we INSERT a record in STUDENT table the same record should get duplicated (INSERTED) in STUDENT_LOG table. (Create STUDENT_LOG table, having the same structure as STUDENT table).
+
+
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql>
+mysql> -- Assuming STUDENT_LOG table structure (same as STUDENT table)
+mysql> CREATE TABLE STUDENT_LOG (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql>
+mysql> -- Create the trigger to insert a duplicate record
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER insertDuplicate
+    -> AFTER INSERT ON STUDENT
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO STUDENT_LOG (namefirst, namelast, DOB, emailID)
+    ->     VALUES (NEW.namefirst, NEW.namelast, NEW.DOB, NEW.emailID);
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+
+mysql> INSERT INTO STUDENT (namefirst, namelast, DOB, emailID)
+    -> VALUES ('John', 'Doe', '2000-01-01', 'john.doe@example.com');
+Query OK, 1 row affected (0.03 sec)
+
+
+----------------->Q 3. Write a trigger(named updateStudent) on STUDENT table, that as soon as we UPDATE student emailID column data in STUDENT table, the update record should get inserted in STUDENT_LOG table.
+
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> -- Assuming STUDENT_LOG table structure (same as STUDENT table)
+mysql> CREATE TABLE STUDENT_LOG (
+    ->     logID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     studentID INT,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255),
+    ->     logDate DATE,
+    ->     logTime TIME
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> -- Create the trigger to insert an updated record
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER updateStudent
+    -> AFTER UPDATE ON STUDENT
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.emailID <> OLD.emailID THEN
+    ->         INSERT INTO STUDENT_LOG (studentID, namefirst, namelast, DOB, emailID, logDate, logTime)
+    ->         VALUES (NEW.studentID, NEW.namefirst, NEW.namelast, NEW.DOB, NEW.emailID, CURDATE(), CURTIME());
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+
+
+
+-------------->Q 4. Write a trigger (named deleteStudent) on STUDENT table, that as soon as we DELETE any record from STUDENT table, then that record should get inserted into STUDENT_LOG table.
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql>
+mysql> -- Assuming STUDENT_LOG table structure (same as STUDENT table)
+mysql> CREATE TABLE STUDENT_LOG (
+    ->     logID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     studentID INT,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255),
+    ->     logDate DATE,
+    ->     logTime TIME
+    -> );
+ERROR 1050 (42S01): Table 'student_log' already exists
+mysql>
+mysql> -- Create the trigger to insert a deleted record
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER deleteStudent
+    -> AFTER DELETE ON STUDENT
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO STUDENT_LOG (studentID, namefirst, namelast, DOB, emailID, logDate, logTime)
+    ->     VALUES (OLD.studentID, OLD.namefirst, OLD.namelast, OLD.DOB, OLD.emailID, CURDATE(), CURTIME());
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+
+
+
+---------------->Q 5. Write a trigger (named insertValidation) on STUDENT table, that if today is Sunday then, no record should get inserted in STUDENT table.
+
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     namefirst VARCHAR(255),
+    ->     namelast VARCHAR(255),
+    ->     DOB DATE,
+    ->     emailID VARCHAR(255)
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql>
+mysql> -- Create the trigger for insert validation
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER insertValidation
+    -> BEFORE INSERT ON STUDENT
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF DAYOFWEEK(CURDATE()) = 1 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'No record insertion on Sundays';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>

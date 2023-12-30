@@ -1,0 +1,39 @@
+Assignment No : 13
+Name : Gaurav Gaikwad
+PRN : 230943120029
+
+
+
+
+mysql> select s.namefirst,(select count(bs.batchID)
+    -> from batch_students as bs
+    -> where bs.studentID = s.ID) as batches
+    -> from student as s
+    -> where (select count(bs.batchID) from
+    -> batch_students as bs
+    -> where bs.studentID = s.ID) > 2;
++-----------+---------+
+| namefirst | batches |
++-----------+---------+
+| ulka      |       3 |
+| ruhan     |       3 |
+| deep      |       3 |
+| kaushal   |       3 |
++-----------+---------+
+4 rows in set (0.00 sec)
+
+
+
+
+mysql> select s.id, s.namefirst, bs.batchID
+    -> from student as s
+    -> INNER JOIN batch_students as bs ON s.id = bs.studentID
+    -> WHERE bs.batchID = (SELECT batchID from batch_students WHERE studentID = (SELECT id FROM student WHERE namefirst = 'saleel' LIMIT 1) LIMIT 1);
++----+-----------+---------+
+| id | namefirst | batchID |
++----+-----------+---------+
+|  1 | saleel    |       1 |
+|  7 | sharmin   |       1 |
+| 20 | kaushal   |       1 |
++----+-----------+---------+
+3 rows in set (0.00 sec)

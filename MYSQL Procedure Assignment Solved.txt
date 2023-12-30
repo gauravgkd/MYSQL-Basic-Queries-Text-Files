@@ -1,0 +1,282 @@
+-----------> Q 1. Create a LOGIN table (username, password, and email). Write a procedure (named addUser) to pass the username, password, and email-ID through the procedure and store the data in the LOGIN table.
+
+
+mysql> use timepass;
+Database changed
+mysql> -- Create the LOGIN table
+mysql> CREATE TABLE LOGIN (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     username VARCHAR(255) NOT NULL,
+    ->     password VARCHAR(255) NOT NULL,
+    ->     email VARCHAR(255) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.17 sec)
+
+mysql>
+mysql> -- Create the stored procedure to add a user
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE addUser(IN p_username VARCHAR(255), IN p_password VARCHAR(255), IN p_email VARCHAR(255))
+    -> BEGIN
+    ->     INSERT INTO LOGIN (username, password, email) VALUES (p_username, p_password, p_email);
+    -> END //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> -- Call the addUser procedure to add a new user
+mysql> CALL addUser('john_doe', 'password123', 'john.doe@example.com');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT ROUTINE_NAME
+    -> FROM INFORMATION_SCHEMA.ROUTINES
+    -> WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_NAME = 'addUser';
++--------------+
+| ROUTINE_NAME |
++--------------+
+| addUser      |
++--------------+
+1 row in set (0.02 sec)
+
+mysql> SHOW CREATE PROCEDURE addUser;
++-----------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| Procedure | sql_mode                                                                                                              | Create Procedure                                                                                                                                                                                                                             | character_set_client | collation_connection | Database Collation |
++-----------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+| addUser   | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | CREATE DEFINER=`root`@`localhost` PROCEDURE `addUser`(IN p_username VARCHAR(255), IN p_password VARCHAR(255), IN p_email VARCHAR(255))
+BEGIN
+    INSERT INTO LOGIN (username, password, email) VALUES (p_username, p_password, p_email);
+END | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
++-----------+-----------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------+----------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql>
+
+
+
+-------------->Q 2. Create a LOG table having following columns (id (auto_increment), curr_date, curr_time, and message). Write a procedure (named checkUser) to pass the email-ID as an input, check whether passed email-ID is available in LOGIN table or not available. If the email-ID is available then display the username and his password. If the email-ID is not available then, insert (curr_date, curr_time, and message) in LOG table.
+
+
+mysql> -- Create the stored procedure to check user and log the activity
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE checkUser(IN p_email VARCHAR(255))
+    -> BEGIN
+    ->     DECLARE v_username VARCHAR(255);
+    ->     DECLARE v_password VARCHAR(255);
+    ->
+    ->     -- Check if the email exists in the LOGIN table
+    ->     SELECT username, password INTO v_username, v_password
+    ->     FROM LOGIN
+    ->     WHERE email = p_email;
+    ->
+    ->     -- If email exists, display username and password
+    ->     IF v_username IS NOT NULL THEN
+    ->         SELECT 'User Found: Username - ', v_username, ', Password - ', v_password AS 'Message';
+    ->     ELSE
+    ->         -- If email does not exist, log the activity in the LOG table
+    ->         INSERT INTO LOG (curr_date, curr_time, message)
+    ->         VALUES (CURDATE(), CURTIME(), CONCAT('Email not found: ', p_email));
+    ->         SELECT 'User not found. Log entry created.' AS 'Message';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL checkUser('john.doe@example.com');
++-------------------------+------------+---------------+-------------+
+| User Found: Username -  | v_username | , Password -  | Message     |
++-------------------------+------------+---------------+-------------+
+| User Found: Username -  | john_doe   | , Password -  | password123 |
++-------------------------+------------+---------------+-------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+
+
+---------------->Q 3. Write a procedure(named getQualification) that takes studentID as a parameter. If studentID is present in the student table, then print his student details along with STUDENT_QUALIFICATION details and if the studentID is not present display message “Student not found…” (Use: STUDENT, and STUDENT_QUALIFICATION tables)
+
+
+mysql> -- Create the stored procedure to get student details and qualification
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE getQualification(IN p_studentID INT)
+    -> BEGIN
+    ->     DECLARE v_studentName VARCHAR(255);
+    ->     DECLARE v_dob DATE;
+    ->
+    ->     -- Check if the studentID exists in the STUDENT table
+    ->     SELECT studentName, dob INTO v_studentName, v_dob
+    ->     FROM STUDENT
+    ->     WHERE studentID = p_studentID;
+    ->
+    ->     -- If studentID exists, fetch qualification details and print
+    ->     IF v_studentName IS NOT NULL THEN
+    ->         SELECT
+    ->             s.studentID,
+    ->             s.studentName,
+    ->             s.dob,
+    ->             q.qualification,
+    ->             q.grade
+    ->         FROM STUDENT s
+    ->         JOIN STUDENT_QUALIFICATION q ON s.studentID = q.studentID
+    ->         WHERE s.studentID = p_studentID;
+    ->
+    ->     ELSE
+    ->         -- If studentID does not exist, display a message
+    ->         SELECT 'Student not found...' AS 'Message';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL getQualification(1);
++----------------------+
+| Message              |
++----------------------+
+| Student not found... |
++----------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.06 sec)
+
+
+
+---------------->Q 4. Write a procedure (named addStudent) that inserts a new student with his phone number and his address into the STUDENT, PHONE, and ADDRESS table.
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     studentName VARCHAR(255),
+    ->     dob DATE
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql>
+mysql> -- Assuming PHONE table structure
+mysql> CREATE TABLE PHONE (
+    ->     studentID INT,
+    ->     phoneNumber VARCHAR(15),
+    ->     PRIMARY KEY (studentID),
+    ->     FOREIGN KEY (studentID) REFERENCES STUDENT(studentID)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> -- Assuming ADDRESS table structure
+mysql> CREATE TABLE ADDRESS (
+    ->     studentID INT,
+    ->     street VARCHAR(255),
+    ->     city VARCHAR(255),
+    ->     PRIMARY KEY (studentID),
+    ->     FOREIGN KEY (studentID) REFERENCES STUDENT(studentID)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> -- Create the stored procedure to add a new student
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE addStudent(
+    ->     IN p_studentName VARCHAR(255),
+    ->     IN p_dob DATE,
+    ->     IN p_phoneNumber VARCHAR(15),
+    ->     IN p_street VARCHAR(255),
+    ->     IN p_city VARCHAR(255)
+    -> )
+    -> BEGIN
+    ->     DECLARE v_studentID INT;
+    ->
+    ->     -- Insert into STUDENT table
+    ->     INSERT INTO STUDENT (studentName, dob)
+    ->     VALUES (p_studentName, p_dob);
+    ->
+    ->     -- Get the last inserted studentID
+    ->     SET v_studentID = LAST_INSERT_ID();
+    ->
+    ->     -- Insert into PHONE table
+    ->     INSERT INTO PHONE (studentID, phoneNumber)
+    ->     VALUES (v_studentID, p_phoneNumber);
+    ->
+    ->     -- Insert into ADDRESS table
+    ->     INSERT INTO ADDRESS (studentID, street, city)
+    ->     VALUES (v_studentID, p_street, p_city);
+    ->
+    ->     SELECT 'Student added successfully.' AS 'Message';
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+
+
+--------------->Q 5. Write a procedure (named addQualification) that takes studentID, and qualification details as a parameter. If studentID is present in the STUDENT table, then insert the qualification in STUDENT_QUALIFICATION table and return a message “Record inserted” or else print ‘Student not found’. (hint: using OUT parameter) (Use: STUDENT, and STUDENT_QUALIFICATION tables).
+
+
+mysql> -- Assuming STUDENT table structure
+mysql> CREATE TABLE STUDENT (
+    ->     studentID INT PRIMARY KEY,
+    ->     studentName VARCHAR(255),
+    ->     dob DATE
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql>
+mysql> -- Assuming STUDENT_QUALIFICATION table structure
+mysql> CREATE TABLE STUDENT_QUALIFICATION (
+    ->     studentID INT,
+    ->     qualification VARCHAR(255),
+    ->     grade VARCHAR(255),
+    ->     PRIMARY KEY (studentID),
+    ->     FOREIGN KEY (studentID) REFERENCES STUDENT(studentID)
+    -> );
+ERROR 1050 (42S01): Table 'student_qualification' already exists
+mysql>
+mysql> -- Create the stored procedure to add qualification
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE addQualification(
+    ->     IN p_studentID INT,
+    ->     IN p_qualification VARCHAR(255),
+    ->     IN p_grade VARCHAR(255),
+    ->     OUT p_message VARCHAR(255)
+    -> )
+    -> BEGIN
+    ->     DECLARE v_studentName VARCHAR(255);
+    ->
+    ->     -- Check if the studentID exists in the STUDENT table
+    ->     SELECT studentName INTO v_studentName
+    ->     FROM STUDENT
+    ->     WHERE studentID = p_studentID;
+    ->
+    ->     -- If studentID exists, insert qualification details
+    ->     IF v_studentName IS NOT NULL THEN
+    ->         INSERT INTO STUDENT_QUALIFICATION (studentID, qualification, grade)
+    ->         VALUES (p_studentID, p_qualification, p_grade);
+    ->
+    ->         SET p_message = 'Record inserted';
+    ->     ELSE
+    ->         -- If studentID does not exist, set message
+    ->         SET p_message = 'Student not found';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> SET @message = '';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CALL addQualification(1, 'Bachelor', 'A', @message);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @message;
++-------------------+
+| @message          |
++-------------------+
+| Student not found |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> SET @message = '';
+Query OK, 0 rows affected (0.00 sec)

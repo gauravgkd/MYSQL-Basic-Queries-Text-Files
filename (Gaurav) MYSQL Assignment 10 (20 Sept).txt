@@ -1,0 +1,161 @@
+MYSQL Assignment No : 10
+Name : Gaurav Gaikwad
+PRN : 230943120029
+
+
+
+mysql> create table faculty1(
+    -> fid int primary key,
+    -> fname varchar(20) not null,
+    -> sp_skill_1 varchar(20),
+    -> sp_skill_2 varchar(20));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> desc faculty1;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| fid        | int         | NO   | PRI | NULL    |       |
+| fname      | varchar(20) | NO   |     | NULL    |       |
+| sp_skill_1 | varchar(20) | YES  |     | NULL    |       |
+| sp_skill_2 | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into faculty1 values(10,'AMOL','DATABASE','JAVA');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into faculty1 values(11,'ASHA','JAVA','MYSQL');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into faculty1 values(12,'KIRAN','CPP','DATABASE');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into faculty1 values(13,'SEETA','MYSQL','DATABASE');
+Query OK, 1 row affected (0.03 sec)
+
+
+
+
+mysql> create table courses(
+    -> cid int primary key,
+    -> cname varchar(20),
+    -> rid int,
+    -> fid int,
+    -> constraint fk_fid foreign key(fid) references faculty1(fid)
+    -> on delete set null);
+Query OK, 0 rows affected (0.71 sec)
+
+mysql> desc courses;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int         | NO   | PRI | NULL    |       |
+| cname | varchar(20) | YES  |     | NULL    |       |
+| rid   | int         | YES  |     | NULL    |       |
+| fid   | int         | YES  | MUL | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into courses values(121,'DBDA',100,10);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into courses values(131,'DAC',101,NULL);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into courses values(141,'DTISS',NULL,NULL);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into courses values(151,'DIOT',105,12);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> desc courses;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int         | NO   | PRI | NULL    |       |
+| cname | varchar(20) | YES  |     | NULL    |       |
+| rid   | int         | YES  |     | NULL    |       |
+| fid   | int         | YES  | MUL | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from faculty1;
++-----+-------+------------+------------+
+| fid | fname | sp_skill_1 | sp_skill_2 |
++-----+-------+------------+------------+
+|  10 | AMOL  | DATABASE   | JAVA       |
+|  11 | ASHA  | JAVA       | MYSQL      |
+|  12 | KIRAN | CPP        | DATABASE   |
+|  13 | SEETA | MYSQL      | DATABASE   |
++-----+-------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from courses;
++-----+-------+------+------+
+| cid | cname | rid  | fid  |
++-----+-------+------+------+
+| 121 | DBDA  |  100 |   10 |
+| 131 | DAC   |  101 | NULL |
+| 141 | DTISS | NULL | NULL |
+| 151 | DIOT  |  105 |   12 |
++-----+-------+------+------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+mysql> create table room(
+    -> roomid int primary key,
+    -> rname varchar(20),
+    -> rloc varchar(20));
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> desc room;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| roomid | int         | NO   | PRI | NULL    |       |
+| rname  | varchar(20) | YES  |     | NULL    |       |
+| rloc   | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into room values(100,'RUBY','1st Floor');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into room values(101,'PEARL','2nd Floor');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into room values(105,'DIAMOND','1st Floor');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into room values(103,'EMERALD','1st Floor');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> desc room;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| roomid | int         | NO   | PRI | NULL    |       |
+| rname  | varchar(20) | YES  |     | NULL    |       |
+| rloc   | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from room;
++--------+---------+-----------+
+| roomid | rname   | rloc      |
++--------+---------+-----------+
+|    100 | RUBY    | 1st Floor |
+|    101 | PEARL   | 2nd Floor |
+|    103 | EMERALD | 1st Floor |
+|    105 | DIAMOND | 1st Floor |
++--------+---------+-----------+
+4 rows in set (0.00 sec)
+
+
+
+
+

@@ -1,0 +1,33 @@
+---------------->Q 1.Create a new table called STUDENT_NEW having following columns (studentID, namefirst, namelast, DOB, and emailID). Write a function names autoNumberto return auto generate studentID and return the new value (Use: STUDENT_NEW table).
+
+mysql> -- Create a function to auto-generate studentID
+mysql> DELIMITER //
+mysql>
+mysql> CREATE FUNCTION autoNumber()
+    -> RETURNS INT
+    -> BEGIN
+    ->     DECLARE newID INT;
+    ->
+    ->     -- Insert a dummy row to get the next auto-incremented value
+    ->     INSERT INTO STUDENT_NEW (namefirst, namelast, DOB, emailID)
+    ->     VALUES ('temp', 'temp', CURDATE(), 'temp@email.com');
+    ->
+    ->     -- Retrieve the last inserted auto-incremented value
+    ->     SET newID = LAST_INSERT_ID();
+    ->
+    ->     -- Delete the dummy row
+    ->     DELETE FROM STUDENT_NEW WHERE studentID = newID;
+    ->
+    ->     -- Return the generated studentID
+    ->     RETURN newID;
+    -> END //
+mysql> DELIMITER ;
+
+------------------>Q 2. Write a function which will accept email-ID from the user, if the email-ID is present return his username and password or else `Return “Employee not exists”. (Use: LOGIN table)
+
+
+------------------>Q 3. Write a function which will accept studentID from the user and calculate the sum of (10th, 12th, and BE) marks.
+
+------------------>Q 1. Pass DEPTNO to the function (named sumSalary) and calculate the sum of salary.(Use: EMP table)
+
+

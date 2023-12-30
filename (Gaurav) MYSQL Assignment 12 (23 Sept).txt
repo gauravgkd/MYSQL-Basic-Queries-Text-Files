@@ -1,0 +1,167 @@
+MYSQL Assignment No : 12
+Name : Gaurav Gaikwad
+PRN : 230943120029
+
+
+
+mysql> create table vehicle(
+    -> vid int auto_increment,
+    -> vname varchar(20),
+    -> price int,
+    -> description varchar(20),
+    -> constraint pk_vid primary key(vid));
+Query OK, 0 rows affected (0.22 sec)
+
+mysql> insert into vehicle values(default,'Activa',90000,'Moped');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into vehicle values(default,'Santro',490000,'Car');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into vehicle values(default,'MotorBike',190000,'Bike');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> desc vehicle;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| vid         | int         | NO   | PRI | NULL    | auto_increment |
+| vname       | varchar(20) | YES  |     | NULL    |                |
+| price       | int         | YES  |     | NULL    |                |
+| description | varchar(20) | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from vehicle;
++-----+-----------+--------+-------------+
+| vid | vname     | price  | description |
++-----+-----------+--------+-------------+
+|   1 | Activa    |  90000 | Moped       |
+|   2 | Santro    | 490000 | Car         |
+|   3 | MotorBike | 190000 | Bike        |
++-----+-----------+--------+-------------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> create table customer(
+    -> custid int primary key,
+    -> cname varchar(20),
+    -> address varchar(20));
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into customer values(1,'ANKUR','Vidhut Nagar');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(2,'ANURAG','VMV Area');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(3,'ABHIR','Amravati');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> desc customer;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| custid  | int         | NO   | PRI | NULL    |       |
+| cname   | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from customer;
++--------+--------+--------------+
+| custid | cname  | address      |
++--------+--------+--------------+
+|      1 | ANKUR  | Vidhut Nagar |
+|      2 | ANURAG | VMV Area     |
+|      3 | ABHIR  | Amravati     |
++--------+--------+--------------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> create table salesman(
+    -> sid int primary key,
+    -> sname varchar(20),
+    -> address varchar(20));
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> insert into salesman values(11,'RAJESH','MUMBAI');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into salesman values(12,'SEEMA','PUNE');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into salesman values(13,'RAKHI','PUNE');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> desc salesman;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| sid     | int         | NO   | PRI | NULL    |       |
+| sname   | varchar(20) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from salesman;
++-----+--------+---------+
+| sid | sname  | address |
++-----+--------+---------+
+|  11 | RAJESH | MUMBAI  |
+|  12 | SEEMA  | PUNE    |
+|  13 | RAKHI  | PUNE    |
++-----+--------+---------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> create table cust_vehicle(
+    -> custid int,
+    -> vid int,
+    -> sid int,
+    -> Buy_Price int);
+Query OK, 0 rows affected (0.51 sec)
+
+mysql> insert into cust_vehicle values(1,1,10,75000);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into cust_vehicle values(1,2,10,90000);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into cust_vehicle values(2,3,11,80000);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into cust_vehicle values(3,3,11,75000);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into cust_vehicle values(3,3,10,775000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> desc cust_vehicle;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| custid    | int  | YES  |     | NULL    |       |
+| vid       | int  | YES  |     | NULL    |       |
+| sid       | int  | YES  |     | NULL    |       |
+| Buy_Price | int  | YES  |     | NULL    |       |
++-----------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from cust_vehicle;
++--------+------+------+-----------+
+| custid | vid  | sid  | Buy_Price |
++--------+------+------+-----------+
+|      1 |    1 |   10 |     75000 |
+|      1 |    2 |   10 |     90000 |
+|      2 |    3 |   11 |     80000 |
+|      3 |    3 |   11 |     75000 |
+|      3 |    3 |   10 |    775000 |
++--------+------+------+-----------+
+5 rows in set (0.00 sec)

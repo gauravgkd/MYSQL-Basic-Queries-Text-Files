@@ -1,0 +1,386 @@
+MYSQL Assignment No : 07
+Name : Gaurav Gaikwad
+PRN : 2309432120029
+
+
+
+mysql> select * from emp where job= 'salesman' and datediff(curdate(), hiredate) > 10;
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+
+
+
+mysql> select empno,ename,sal,job from emp where deptno=30;
++-------+--------+---------+----------+
+| empno | ename  | sal     | job      |
++-------+--------+---------+----------+
+|  7499 | ALLEN  | 1600.00 | SALESMAN |
+|  7521 | WARD   | 1250.00 | SALESMAN |
+|  7654 | MARTIN | 1250.00 | SALESMAN |
+|  7698 | BLAKE  | 2850.00 | MANAGER  |
+|  7844 | TURNER | 1500.00 | SALESMAN |
+|  7900 | JAMES  |  950.00 | CLERK    |
++-------+--------+---------+----------+
+6 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp where sal >= 2400 and sal <= 5000;
++-------+-------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7566 | JONES | MANAGER   | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7698 | BLAKE | MANAGER   | 7839 | 1981-05-01 | 2850.00 | NULL |     30 |
+|  7782 | CLARK | MANAGER   | 7839 | 1981-06-09 | 2450.00 | NULL |     10 |
+|  7788 | SCOTT | ANALYST   | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7839 | KING  | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7902 | FORD  | ANALYST   | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+-------+-----------+------+------------+---------+------+--------+
+6 rows in set (0.00 sec)
+
+
+
+
+
+mysql> select * from emp where mgr = 6367 or mgr = 6831 or mgr = 6656 or mgr = 6900;
+Empty set (0.00 sec)
+
+
+
+
+mysql> select ename,sal from emp order by sal;
++--------+---------+
+| ename  | sal     |
++--------+---------+
+| SMITH  |  800.00 |
+| JAMES  |  950.00 |
+| ADAMS  | 1100.00 |
+| WARD   | 1250.00 |
+| MARTIN | 1250.00 |
+| MILLER | 1300.00 |
+| TURNER | 1500.00 |
+| ALLEN  | 1600.00 |
+| CLARK  | 2450.00 |
+| BLAKE  | 2850.00 |
+| JONES  | 2975.00 |
+| SCOTT  | 3000.00 |
+| FORD   | 3000.00 |
+| KING   | 5000.00 |
++--------+---------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql>  select deptno,job,ename from emp order by deptno, job desc;
++--------+-----------+--------+
+| deptno | job       | ename  |
++--------+-----------+--------+
+|     10 | PRESIDENT | KING   |
+|     10 | MANAGER   | CLARK  |
+|     10 | CLERK     | MILLER |
+|     20 | MANAGER   | JONES  |
+|     20 | CLERK     | SMITH  |
+|     20 | CLERK     | ADAMS  |
+|     20 | ANALYST   | SCOTT  |
+|     20 | ANALYST   | FORD   |
+|     30 | SALESMAN  | ALLEN  |
+|     30 | SALESMAN  | WARD   |
+|     30 | SALESMAN  | MARTIN |
+|     30 | SALESMAN  | TURNER |
+|     30 | MANAGER   | BLAKE  |
+|     30 | CLERK     | JAMES  |
++--------+-----------+--------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp order by job desc;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql> select empno,ename,sal,(sal/30) month_sal,(sal*12) annual_sal from emp order by annual_sal;
++-------+--------+---------+------------+------------+
+| empno | ename  | sal     | month_sal  | annual_sal |
++-------+--------+---------+------------+------------+
+|  7369 | SMITH  |  800.00 |  26.666667 |    9600.00 |
+|  7900 | JAMES  |  950.00 |  31.666667 |   11400.00 |
+|  7876 | ADAMS  | 1100.00 |  36.666667 |   13200.00 |
+|  7521 | WARD   | 1250.00 |  41.666667 |   15000.00 |
+|  7654 | MARTIN | 1250.00 |  41.666667 |   15000.00 |
+|  7934 | MILLER | 1300.00 |  43.333333 |   15600.00 |
+|  7844 | TURNER | 1500.00 |  50.000000 |   18000.00 |
+|  7499 | ALLEN  | 1600.00 |  53.333333 |   19200.00 |
+|  7782 | CLARK  | 2450.00 |  81.666667 |   29400.00 |
+|  7698 | BLAKE  | 2850.00 |  95.000000 |   34200.00 |
+|  7566 | JONES  | 2975.00 |  99.166667 |   35700.00 |
+|  7788 | SCOTT  | 3000.00 | 100.000000 |   36000.00 |
+|  7902 | FORD   | 3000.00 | 100.000000 |   36000.00 |
+|  7839 | KING   | 5000.00 | 166.666667 |   60000.00 |
++-------+--------+---------+------------+------------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp where job = 'clerk' or job = 'analyst' order by job desc;
++-------+--------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME  | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+--------+---------+------+------------+---------+------+--------+
+|  7369 | SMITH  | CLERK   | 7902 | 1980-12-17 |  800.00 | NULL |     20 |
+|  7876 | ADAMS  | CLERK   | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7900 | JAMES  | CLERK   | 7698 | 1981-12-03 |  950.00 | NULL |     30 |
+|  7934 | MILLER | CLERK   | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7902 | FORD   | ANALYST | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+--------+---------+------+------------+---------+------+--------+
+6 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp where sal < 1000 order by sal desc;
++-------+-------+-------+------+------------+--------+------+--------+
+| EMPNO | ENAME | JOB   | MGR  | HIREDATE   | SAL    | COMM | DEPTNO |
++-------+-------+-------+------+------------+--------+------+--------+
+|  7900 | JAMES | CLERK | 7698 | 1981-12-03 | 950.00 | NULL |     30 |
+|  7369 | SMITH | CLERK | 7902 | 1980-12-17 | 800.00 | NULL |     20 |
++-------+-------+-------+------+------------+--------+------+--------+
+2 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp order by job, empno desc;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql> select * from emp where job != 'president'and job != 'manager' order by sal;
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST  | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
++-------+--------+----------+------+------------+---------+---------+--------+
+10 rows in set (0.00 sec)
+
+
+
+
+
+mysql> select max(sal) as High_Salary from emp;
++-------------+
+| High_Salary |
++-------------+
+|     5000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+mysql> select * from emp e, (select max(sal) as max, min(sal) as min from emp) t where sal<=t.max or sal >= t.min ORDER BY sal;
++-------+--------+-----------+------+------------+---------+---------+--------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO | max     | min    |
++-------+--------+-----------+------+------------+---------+---------+--------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 | 5000.00 | 800.00 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 | 5000.00 | 800.00 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 | 5000.00 | 800.00 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 | 5000.00 | 800.00 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 | 5000.00 | 800.00 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 | 5000.00 | 800.00 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 | 5000.00 | 800.00 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 | 5000.00 | 800.00 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 | 5000.00 | 800.00 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 | 5000.00 | 800.00 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 | 5000.00 | 800.00 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 | 5000.00 | 800.00 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 | 5000.00 | 800.00 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 | 5000.00 | 800.00 |
++-------+--------+-----------+------+------------+---------+---------+--------+---------+--------+
+14 rows in set (0.00 sec)
+
+
+
+
+mysql> select deptno, count(*) as No_Of_Employee from emp group by deptno having count(*) < 4;
++--------+----------------+
+| deptno | No_Of_Employee |
++--------+----------------+
+|     10 |              3 |
++--------+----------------+
+1 row in set (0.02 sec)
+
+
+
+
+
+mysql> select count(*) as No_Of_Employees, avg(sal) as Avg_Salary, deptno,job from emp group by deptno,job;
++-----------------+-------------+--------+-----------+
+| No_Of_Employees | Avg_Salary  | deptno | job       |
++-----------------+-------------+--------+-----------+
+|               2 |  950.000000 |     20 | CLERK     |
+|               4 | 1400.000000 |     30 | SALESMAN  |
+|               1 | 2975.000000 |     20 | MANAGER   |
+|               1 | 2850.000000 |     30 | MANAGER   |
+|               1 | 2450.000000 |     10 | MANAGER   |
+|               2 | 3000.000000 |     20 | ANALYST   |
+|               1 | 5000.000000 |     10 | PRESIDENT |
+|               1 |  950.000000 |     30 | CLERK     |
+|               1 | 1300.000000 |     10 | CLERK     |
++-----------------+-------------+--------+-----------+
+9 rows in set (0.03 sec)
+
+
+
+
+mysql> select ename from emp where ename like 'A_____';
+Empty set (0.00 sec)
+
+
+
+
+mysql> select * from emp where length(ename) = 6 and ename like 'A%N';
+Empty set (0.00 sec)
+
+
+
+
+
+mysql> select * from emp where ename like '%AR%';
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> select empno as Original_EmpNo,
+    -> case
+    -> when left(empno,2) = '68' then substring(empno,3)
+    -> else empno
+    -> end as Trim_ID
+    -> from emp
+    -> where not empno like '68%';
++----------------+---------+
+| Original_EmpNo | Trim_ID |
++----------------+---------+
+|           7369 | 7369    |
+|           7499 | 7499    |
+|           7521 | 7521    |
+|           7566 | 7566    |
+|           7654 | 7654    |
+|           7698 | 7698    |
+|           7782 | 7782    |
+|           7788 | 7788    |
+|           7839 | 7839    |
+|           7844 | 7844    |
+|           7876 | 7876    |
+|           7900 | 7900    |
+|           7902 | 7902    |
+|           7934 | 7934    |
++----------------+---------+
+14 rows in set (0.03 sec)
+
+
+
+
+mysql> select * from emp where monthname(hiredate) like '_A%';
++-------+--------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME  | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+--------+---------+------+------------+---------+------+--------+
+|  7698 | BLAKE  | MANAGER | 7839 | 1981-05-01 | 2850.00 | NULL |     30 |
+|  7876 | ADAMS  | CLERK   | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7934 | MILLER | CLERK   | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+---------+------+------------+---------+------+--------+
+3 rows in set (0.04 sec)
+
+
+
+
+mysql> select deptno, sum(sal) as Total_Salary from emp group by deptno having sum(sal) >= 50000;
+Empty set (0.00 sec)
+
+
+
+
+
+mysql> select * from student_qualifications where marks > 95;
++----+-----------+------+---------------+-------------------------+-------+------+
+| ID | studentID | name | college       | university              | marks | year |
++----+-----------+------+---------------+-------------------------+-------+------+
+| 11 |         4 | 12   | New Hampshire | Yale University         | 97    | 2012 |
+| 21 |         7 | BE   | Kentucky      | Harvard University      | 97    | 2017 |
+| 25 |         9 | 10   | Maine         | Pennsylvania University | 98    | 2012 |
+| 43 |        15 | 10   | New Hampshire | California University   | 96    | 2011 |
+| 72 |        24 | BE   | Kentucky      | Harvard University      | 97    | 2017 |
+| 75 |        25 | BE   | Kentucky      | Harvard University      | 97    | 2017 |
++----+-----------+------+---------------+-------------------------+-------+------+
+6 rows in set (0.00 sec)
+
+
+

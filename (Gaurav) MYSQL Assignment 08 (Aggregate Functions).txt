@@ -1,0 +1,141 @@
+MYSQL Assignment NO 08
+Name : Gaurav Gaikwad
+PRN : 230943120029
+
+
+
+mysql> select count(namefirst) as Total_Students from student;
++----------------+
+| Total_Students |
++----------------+
+|             28 |
++----------------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> select count(ID) as Total_Student_Born_in_1986 from student where year(dob) = '1986';
++----------------------------+
+| Total_Student_Born_in_1986 |
++----------------------------+
+|                          2 |
++----------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> select count(ID) as Total_Student_Whose_Name_Starts_With_B from student where namefirst like 'B%';
++----------------------------------------+
+| Total_Student_Whose_Name_Starts_With_B |
++----------------------------------------+
+|                                      3 |
++----------------------------------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select count(ID) as Total_Students_Born_In_July from student where month(dob) = '07';
++-----------------------------+
+| Total_Students_Born_In_July |
++-----------------------------+
+|                           6 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> select studentid, count(number) as NoOF_Phones from student_phone group by studentid having count(number) > 2;
++-----------+-------------+
+| studentid | NoOF_Phones |
++-----------+-------------+
+|         6 |           3 |
+|        13 |           4 |
++-----------+-------------+
+2 rows in set (0.02 sec)
+
+
+
+
+mysql> select count(distinct university) as Unique_University_Count from student_qualifications;
++-------------------------+
+| Unique_University_Count |
++-------------------------+
+|                      11 |
++-------------------------+
+1 row in set (0.02 sec)
+
+
+
+
+mysql> select university, count(name) as Count_Of_BE_Student from student_qualifications  group by name,university having name like 'BE';
++-------------------------+---------------------+
+| university              | Count_Of_BE_Student |
++-------------------------+---------------------+
+| Harvard University      |                   9 |
+| University of Florida   |                   3 |
+| University of Chicago   |                   1 |
+| Columbia University     |                   2 |
+| Yale University         |                   1 |
+| Pennsylvania University |                   2 |
+| University of Michigan  |                   1 |
+| University of Ohio      |                   1 |
++-------------------------+---------------------+
+8 rows in set (0.00 sec)
+
+
+
+
+mysql> select name,count(studentid) as Total_Student_Who_Done_BE from student_qualifications group by name having name like 'BE';
++------+---------------------------+
+| name | Total_Student_Who_Done_BE |
++------+---------------------------+
+| BE   |                        20 |
++------+---------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> select name,count(studentid) as Total_Student_Who_Done_BE from student_qualifications group by name having name not like 'BE';
++--------+---------------------------+
+| name   | Total_Student_Who_Done_BE |
++--------+---------------------------+
+| 10     |                        28 |
+| 12     |                        27 |
+| B.Com  |                         1 |
+| M.Com. |                         5 |
+| B.Com. |                         1 |
+| DIP    |                         2 |
+| MCA    |                         1 |
++--------+---------------------------+
+7 rows in set (0.00 sec)
+
+
+
+
+mysql> SELECT MAX(marks) from student_qualifications WHERE name = 'BE';
++------------+
+| MAX(marks) |
++------------+
+| 97         |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+mysql> SELECT MIN(marks) from student_qualifications WHERE name = 'BE';
++------------+
+| MIN(marks) |
++------------+
+| 57         |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+
